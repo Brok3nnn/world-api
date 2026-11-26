@@ -28,9 +28,9 @@
     "verify": "pnpm check && pnpm test && pnpm build"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.2",
+    "@biomejs/biome": "2.6.8",
     "@repo/contracts": "workspace:*",
-    "knip": "^6.47.0"
+    "knip": "^6.48.0"
   },
   "packageManager": "pnpm@11.28.6"
 }
