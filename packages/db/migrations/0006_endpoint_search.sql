@@ -1,0 +1,1 @@
+CREATE INDEX "endpoints_search_idx" ON "endpoints" USING gin (to_tsvector('simple', "title" || ' ' || "summary" || ' ' || "category"));

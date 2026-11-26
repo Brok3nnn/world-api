@@ -1,0 +1,67 @@
+import type { ActivityEvent } from "../../types";
+
+export const activityFixtures: readonly ActivityEvent[] = [
+  {
+    id: "act_rooftop_milestone",
+    kind: "milestone",
+    actorHandle: "rooftop_lab",
+    description: "passed 88K paid calls this month",
+    occurredAt: "2026-11-21T11:42:00Z",
+    endpoint: { publisherHandle: "rooftop_lab", slug: "district-7-air" },
+  },
+  {
+    id: "act_forest_cam_like",
+    kind: "liked",
+    actorHandle: "birdwatch_ana",
+    description: "liked Forest birds",
+    occurredAt: "2026-11-21T11:31:00Z",
+    endpoint: { publisherHandle: "mira_field", slug: "forest-cam-12" },
+  },
+  {
+    id: "act_tram_votes",
+    kind: "milestone",
+    actorHandle: "night_commuter",
+    description: "request for tram arrivals passed 200 votes",
+    occurredAt: "2026-11-21T10:08:00Z",
+  },
+  {
+    id: "act_morning_brief",
+    kind: "published",
+    actorHandle: "core",
+    description: "published Morning brief",
+    occurredAt: "2026-11-21T08:15:00Z",
+    endpoint: { publisherHandle: "core", slug: "morning-brief" },
+  },
+  {
+    id: "act_parking_like",
+    kind: "liked",
+    actorHandle: "city_driver",
+    description: "liked Free parking spots",
+    occurredAt: "2026-11-21T06:50:00Z",
+    endpoint: { publisherHandle: "lot_sensors", slug: "free-spots" },
+  },
+  {
+    id: "act_avalanche_shipped",
+    kind: "request-shipped",
+    actorHandle: "alpine_watch",
+    description: "shipped the avalanche danger request",
+    occurredAt: "2026-11-20T17:20:00Z",
+    endpoint: { publisherHandle: "alpine_watch", slug: "avalanche-danger" },
+  },
+  {
+    id: "act_hive_published",
+    kind: "published",
+    actorHandle: "bee_meadow",
+    description: "published Beehive weight",
+    occurredAt: "2026-11-20T12:05:00Z",
+    endpoint: { publisherHandle: "bee_meadow", slug: "hive-weight" },
+  },
+  {
+    id: "act_weather_milestone",
+    kind: "milestone",
+    actorHandle: "core",
+    description: "Weather now reached 99.96% uptime",
+    occurredAt: "2026-11-19T09:00:00Z",
+    endpoint: { publisherHandle: "core", slug: "weather-now" },
+  },
+];

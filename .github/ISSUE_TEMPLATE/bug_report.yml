@@ -1,0 +1,41 @@
+name: Bug report
+description: Something in the gateway, the engine or the tooling does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please do not include secrets or personal
+        data. Security problems go through SECURITY.md instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: The commands or requests that show the problem, such as a `curl` call.
+      placeholder: |
+        1. pnpm install
+        2. pnpm dev:gateway
+        3. curl -s http://127.0.0.1:8787/@core/topeka-weather
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output and logs
+      description: The response or log lines. They are formatted as code automatically.
+      render: shell
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Node.js and pnpm versions, and the commit you ran.
+      placeholder: macOS 15, Node 24.11, pnpm 11.28.6, commit abc1234
+    validations:
+      required: true

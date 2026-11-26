@@ -1,0 +1,766 @@
+{
+  "id": "303314be-b5a1-4939-ae16-33f8c30e257b",
+  "prevId": "77803749-48b1-402f-92ec-8275c047ab7f",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.accounts": {
+      "name": "accounts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "handle": {
+          "name": "handle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "auth_user_id": {
+          "name": "auth_user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "accounts_handle_unique": {
+          "name": "accounts_handle_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "handle"
+          ]
+        },
+        "accounts_auth_user_id_unique": {
+          "name": "accounts_auth_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "auth_user_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "accounts_id_prefix": {
+          "name": "accounts_id_prefix",
+          "value": "\"accounts\".\"id\" ~ '^acc_[0-9a-z_]{1,64}$'"
+        },
+        "accounts_handle_format": {
+          "name": "accounts_handle_format",
+          "value": "\"accounts\".\"handle\" ~ '^[a-z0-9_]{2,32}$'"
+        },
+        "accounts_kind": {
+          "name": "accounts_kind",
+          "value": "\"accounts\".\"kind\" in ('platform', 'user')"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "public.endpoints": {
+      "name": "endpoints",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "method": {
+          "name": "method",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "freshness": {
+          "name": "freshness",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_credits": {
+          "name": "price_credits",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "output_spec": {
+          "name": "output_spec",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "endpoints_catalog_idx": {
+          "name": "endpoints_catalog_idx",
+          "columns": [
+            {
+              "expression": "visibility",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "endpoints_owner_id_accounts_id_fk": {
+          "name": "endpoints_owner_id_accounts_id_fk",
+          "tableFrom": "endpoints",
+          "tableTo": "accounts",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "endpoints_owner_slug_unique": {
+          "name": "endpoints_owner_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "owner_id",
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "endpoints_id_prefix": {
+          "name": "endpoints_id_prefix",
+          "value": "\"endpoints\".\"id\" ~ '^ep_[0-9a-z_]{1,64}$'"
+        },
+        "endpoints_slug_format": {
+          "name": "endpoints_slug_format",
+          "value": "\"endpoints\".\"slug\" ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and length(\"endpoints\".\"slug\") <= 64"
+        },
+        "endpoints_title_length": {
+          "name": "endpoints_title_length",
+          "value": "length(\"endpoints\".\"title\") between 1 and 80"
+        },
+        "endpoints_summary_length": {
+          "name": "endpoints_summary_length",
+          "value": "length(\"endpoints\".\"summary\") between 1 and 280"
+        },
+        "endpoints_category": {
+          "name": "endpoints_category",
+          "value": "\"endpoints\".\"category\" in ('weather', 'environment', 'wildlife', 'finance', 'energy', 'transport', 'developer', 'knowledge', 'places', 'commerce', 'jobs')"
+        },
+        "endpoints_visibility": {
+          "name": "endpoints_visibility",
+          "value": "\"endpoints\".\"visibility\" in ('private', 'unlisted', 'public')"
+        },
+        "endpoints_status": {
+          "name": "endpoints_status",
+          "value": "\"endpoints\".\"status\" in ('building', 'live', 'degraded', 'disabled')"
+        },
+        "endpoints_method": {
+          "name": "endpoints_method",
+          "value": "\"endpoints\".\"method\" in ('computed', 'model-estimate', 'owner-data')"
+        },
+        "endpoints_freshness": {
+          "name": "endpoints_freshness",
+          "value": "\"endpoints\".\"freshness\" in ('1m', '5m', '15m', '1h', '1d')"
+        },
+        "endpoints_price_credits": {
+          "name": "endpoints_price_credits",
+          "value": "\"endpoints\".\"price_credits\" >= 0"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "public.recipe_versions": {
+      "name": "recipe_versions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "endpoint_id": {
+          "name": "endpoint_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document": {
+          "name": "document",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "test_report": {
+          "name": "test_report",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "recipe_versions_one_active_idx": {
+          "name": "recipe_versions_one_active_idx",
+          "columns": [
+            {
+              "expression": "endpoint_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"recipe_versions\".\"active\"",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "recipe_versions_endpoint_id_endpoints_id_fk": {
+          "name": "recipe_versions_endpoint_id_endpoints_id_fk",
+          "tableFrom": "recipe_versions",
+          "tableTo": "endpoints",
+          "columnsFrom": [
+            "endpoint_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "recipe_versions_endpoint_version_unique": {
+          "name": "recipe_versions_endpoint_version_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "endpoint_id",
+            "version"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "recipe_versions_id_prefix": {
+          "name": "recipe_versions_id_prefix",
+          "value": "\"recipe_versions\".\"id\" ~ '^rv_[0-9a-z_]{1,64}$'"
+        },
+        "recipe_versions_version": {
+          "name": "recipe_versions_version",
+          "value": "\"recipe_versions\".\"version\" >= 1"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "public.usage_events": {
+      "name": "usage_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "endpoint_id": {
+          "name": "endpoint_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "caller_id": {
+          "name": "caller_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "outcome": {
+          "name": "outcome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "shape": {
+          "name": "shape",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_credits": {
+          "name": "price_credits",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "latency_ms": {
+          "name": "latency_ms",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refreshed": {
+          "name": "refreshed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "usage_events_endpoint_created_idx": {
+          "name": "usage_events_endpoint_created_idx",
+          "columns": [
+            {
+              "expression": "endpoint_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "usage_events_endpoint_id_endpoints_id_fk": {
+          "name": "usage_events_endpoint_id_endpoints_id_fk",
+          "tableFrom": "usage_events",
+          "tableTo": "endpoints",
+          "columnsFrom": [
+            "endpoint_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "usage_events_caller_id_accounts_id_fk": {
+          "name": "usage_events_caller_id_accounts_id_fk",
+          "tableFrom": "usage_events",
+          "tableTo": "accounts",
+          "columnsFrom": [
+            "caller_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "usage_events_id_prefix": {
+          "name": "usage_events_id_prefix",
+          "value": "\"usage_events\".\"id\" ~ '^use_[0-9a-z_]{1,64}$'"
+        },
+        "usage_events_outcome": {
+          "name": "usage_events_outcome",
+          "value": "\"usage_events\".\"outcome\" in ('served', 'building', 'invalid_request', 'payment_required', 'not_found', 'not_buildable', 'rate_limited', 'internal_error', 'degraded')"
+        },
+        "usage_events_shape": {
+          "name": "usage_events_shape",
+          "value": "\"usage_events\".\"shape\" in ('json', 'number', 'text', 'csv', 'probability')"
+        },
+        "usage_events_price_credits": {
+          "name": "usage_events_price_credits",
+          "value": "\"usage_events\".\"price_credits\" >= 0"
+        },
+        "usage_events_latency_ms": {
+          "name": "usage_events_latency_ms",
+          "value": "\"usage_events\".\"latency_ms\" >= 0"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "public.values_history": {
+      "name": "values_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "endpoint_id": {
+          "name": "endpoint_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "as_of": {
+          "name": "as_of",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipe_version_id": {
+          "name": "recipe_version_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "values_history_endpoint_as_of_idx": {
+          "name": "values_history_endpoint_as_of_idx",
+          "columns": [
+            {
+              "expression": "endpoint_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "as_of",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "values_history_endpoint_id_endpoints_id_fk": {
+          "name": "values_history_endpoint_id_endpoints_id_fk",
+          "tableFrom": "values_history",
+          "tableTo": "endpoints",
+          "columnsFrom": [
+            "endpoint_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "values_history_recipe_version_id_recipe_versions_id_fk": {
+          "name": "values_history_recipe_version_id_recipe_versions_id_fk",
+          "tableFrom": "values_history",
+          "tableTo": "recipe_versions",
+          "columnsFrom": [
+            "recipe_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "values_history_id_prefix": {
+          "name": "values_history_id_prefix",
+          "value": "\"values_history\".\"id\" ~ '^val_[0-9a-z_]{1,64}$'"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "public.values_latest": {
+      "name": "values_latest",
+      "schema": "",
+      "columns": {
+        "endpoint_id": {
+          "name": "endpoint_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "as_of": {
+          "name": "as_of",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fetched_at": {
+          "name": "fetched_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recipe_version_id": {
+          "name": "recipe_version_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "consecutive_failures": {
+          "name": "consecutive_failures",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "last_error": {
+          "name": "last_error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "values_latest_endpoint_id_endpoints_id_fk": {
+          "name": "values_latest_endpoint_id_endpoints_id_fk",
+          "tableFrom": "values_latest",
+          "tableTo": "endpoints",
+          "columnsFrom": [
+            "endpoint_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "values_latest_recipe_version_id_recipe_versions_id_fk": {
+          "name": "values_latest_recipe_version_id_recipe_versions_id_fk",
+          "tableFrom": "values_latest",
+          "tableTo": "recipe_versions",
+          "columnsFrom": [
+            "recipe_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "values_latest_value_complete": {
+          "name": "values_latest_value_complete",
+          "value": "num_nulls(\"values_latest\".\"data\", \"values_latest\".\"as_of\", \"values_latest\".\"fetched_at\", \"values_latest\".\"expires_at\", \"values_latest\".\"recipe_version_id\") in (0, 5)"
+        },
+        "values_latest_expiry": {
+          "name": "values_latest_expiry",
+          "value": "\"values_latest\".\"expires_at\" > \"values_latest\".\"fetched_at\""
+        },
+        "values_latest_failures": {
+          "name": "values_latest_failures",
+          "value": "\"values_latest\".\"consecutive_failures\" >= 0"
+        }
+      },
+      "isRLSEnabled": true
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

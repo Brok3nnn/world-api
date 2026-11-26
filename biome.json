@@ -1,0 +1,479 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.2/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/.next",
+      "!**/coverage",
+      "!**/next-env.d.ts",
+      "!**/migrations",
+      "!**/recordings",
+      "!packages/contracts/openapi.json"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "noUnusedFunctionParameters": "error",
+        "useExhaustiveDependencies": "error"
+      },
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noConsole": {
+          "level": "error",
+          "options": {
+            "allow": ["error", "warn"]
+          }
+        },
+        "noImportCycles": "error"
+      },
+      "style": {
+        "noDefaultExport": "error",
+        "noNonNullAssertion": "error",
+        "noParameterAssign": "error",
+        "useImportType": "error",
+        "useExportType": "error",
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "shorthand"
+          }
+        },
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["kebab-case"],
+            "requireAscii": true
+          }
+        },
+        "noNestedTernary": "error",
+        "noProcessEnv": "error",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "patterns": [
+              {
+                "group": ["@repo/*/src", "@repo/*/src/**"],
+                "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+              },
+              {
+                "group": ["**/packages/*/**", "**/apps/*/**"],
+                "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+              }
+            ]
+          }
+        }
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 15
+          }
+        },
+        "noExcessiveLinesPerFunction": {
+          "level": "error",
+          "options": {
+            "maxLines": 60,
+            "skipBlankLines": true
+          }
+        },
+        "useMaxParams": {
+          "level": "error",
+          "options": {
+            "max": 3
+          }
+        }
+      },
+      "performance": {
+        "noBarrelFile": "error",
+        "noReExportAll": "error"
+      },
+      "nursery": {
+        "noExcessiveLinesPerFile": {
+          "level": "error",
+          "options": {
+            "maxLines": 250,
+            "skipBlankLines": true
+          }
+        }
+      }
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["apps/web/src/app/**", "**/*.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": {
+              "level": "error",
+              "options": {
+                "maxLines": 100,
+                "skipBlankLines": true
+              }
+            }
+          },
+          "nursery": {
+            "noExcessiveLinesPerFile": {
+              "level": "error",
+              "options": {
+                "maxLines": 200,
+                "skipBlankLines": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.ts", "**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          },
+          "nursery": {
+            "noExcessiveLinesPerFile": {
+              "level": "error",
+              "options": {
+                "maxLines": 400,
+                "skipBlankLines": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/data/fixtures/**"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noExcessiveLinesPerFile": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/web/src/components/ui/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off",
+            "useFocusableInteractive": "off",
+            "useKeyWithClickEvents": "off",
+            "noLabelWithoutControl": "off"
+          },
+          "nursery": {
+            "noExcessiveLinesPerFile": {
+              "level": "error",
+              "options": {
+                "maxLines": 300,
+                "skipBlankLines": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/contracts/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@repo/*/src", "@repo/*/src/**"],
+                    "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["**/packages/*/**", "**/apps/*/**"],
+                    "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": [
+                      "@repo/contracts",
+                      "@repo/contracts/**",
+                      "@repo/core",
+                      "@repo/core/**",
+                      "@repo/recipes",
+                      "@repo/recipes/**",
+                      "@repo/db",
+                      "@repo/db/**",
+                      "@repo/gateway",
+                      "@repo/gateway/**",
+                      "@repo/web",
+                      "@repo/web/**"
+                    ],
+                    "message": "The contracts workspace may import no other workspace only; use relative imports inside it. See docs/architecture/overview.md, Layers and dependency rules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/core/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@repo/*/src", "@repo/*/src/**"],
+                    "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["**/packages/*/**", "**/apps/*/**"],
+                    "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": [
+                      "@repo/core",
+                      "@repo/core/**",
+                      "@repo/recipes",
+                      "@repo/recipes/**",
+                      "@repo/db",
+                      "@repo/db/**",
+                      "@repo/gateway",
+                      "@repo/gateway/**",
+                      "@repo/web",
+                      "@repo/web/**"
+                    ],
+                    "message": "The core workspace may import contracts only; use relative imports inside it. See docs/architecture/overview.md, Layers and dependency rules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/recipes/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@repo/*/src", "@repo/*/src/**"],
+                    "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["**/packages/*/**", "**/apps/*/**"],
+                    "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": [
+                      "@repo/recipes",
+                      "@repo/recipes/**",
+                      "@repo/db",
+                      "@repo/db/**",
+                      "@repo/gateway",
+                      "@repo/gateway/**",
+                      "@repo/web",
+                      "@repo/web/**"
+                    ],
+                    "message": "The recipes workspace may import contracts, core only; use relative imports inside it. See docs/architecture/overview.md, Layers and dependency rules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/db/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@repo/*/src", "@repo/*/src/**"],
+                    "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["**/packages/*/**", "**/apps/*/**"],
+                    "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": [
+                      "@repo/recipes",
+                      "@repo/recipes/**",
+                      "@repo/db",
+                      "@repo/db/**",
+                      "@repo/gateway",
+                      "@repo/gateway/**",
+                      "@repo/web",
+                      "@repo/web/**"
+                    ],
+                    "message": "The db workspace may import contracts, core only; use relative imports inside it. See docs/architecture/overview.md, Layers and dependency rules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/gateway/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@repo/*/src", "@repo/*/src/**"],
+                    "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["**/packages/*/**", "**/apps/*/**"],
+                    "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["@repo/gateway", "@repo/gateway/**", "@repo/web", "@repo/web/**"],
+                    "message": "The gateway workspace may import contracts, core, recipes, db only; use relative imports inside it. See docs/architecture/overview.md, Layers and dependency rules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/web/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@repo/*/src", "@repo/*/src/**"],
+                    "message": "Import a workspace package through its declared entry points, never a deep path. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["**/packages/*/**", "**/apps/*/**"],
+                    "message": "Do not reach into another workspace with a relative path; import its package entry point. See docs/architecture/overview.md, Layers and dependency rules."
+                  },
+                  {
+                    "group": ["@repo/gateway", "@repo/gateway/**", "@repo/web", "@repo/web/**"],
+                    "message": "The web workspace may import contracts, core, recipes, db only; use relative imports inside it. See docs/architecture/overview.md, Layers and dependency rules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/env.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "packages/core/src/**",
+        "packages/contracts/src/**",
+        "packages/recipes/src/**",
+        "apps/gateway/src/**",
+        "!**/*.test.ts",
+        "!**/env.ts",
+        "!packages/recipes/src/adapters/node-*.ts",
+        "!packages/recipes/src/**/*-command.ts",
+        "!apps/gateway/src/**/*-command.ts",
+        "!apps/gateway/src/entry/**",
+        "!apps/gateway/src/adapters/postgres/**"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "error"
+          },
+          "style": {
+            "noRestrictedGlobals": {
+              "level": "error",
+              "options": {
+                "deniedGlobals": {
+                  "process": "Portable code reaches the runtime only through ports; Node globals belong in entries, env.ts and Node adapters. See docs/architecture/gateway.md, Portability rules.",
+                  "Buffer": "Portable code reaches the runtime only through ports; Node globals belong in entries, env.ts and Node adapters. See docs/architecture/gateway.md, Portability rules.",
+                  "__dirname": "Portable code reaches the runtime only through ports; Node globals belong in entries, env.ts and Node adapters. See docs/architecture/gateway.md, Portability rules.",
+                  "require": "Portable code reaches the runtime only through ports; Node globals belong in entries, env.ts and Node adapters. See docs/architecture/gateway.md, Portability rules."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

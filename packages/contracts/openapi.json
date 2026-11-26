@@ -1,0 +1,787 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Public data API",
+    "version": "1"
+  },
+  "paths": {
+    "/@{owner}/{slug}": {
+      "get": {
+        "operationId": "callEndpoint",
+        "summary": "Current value of one endpoint",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]{2,32}$"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            }
+          },
+          {
+            "name": "shape",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "type": "string",
+              "enum": [
+                "json",
+                "number",
+                "text",
+                "csv"
+              ]
+            }
+          },
+          {
+            "name": "max_age",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,8})$"
+            }
+          },
+          {
+            "name": "max_price",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,8})$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The value in the shape asked for: the envelope for json, else the bare value.",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/x-request-id"
+              },
+              "cache-control": {
+                "$ref": "#/components/headers/cache-control"
+              },
+              "x-as-of": {
+                "$ref": "#/components/headers/x-as-of"
+              },
+              "x-next-refresh": {
+                "$ref": "#/components/headers/x-next-refresh"
+              },
+              "x-price-credits": {
+                "$ref": "#/components/headers/x-price-credits"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                },
+                "example": {
+                  "data": {
+                    "temperature_c": 4.2
+                  },
+                  "as_of": "2026-11-21T11:45:00Z",
+                  "sources": [
+                    {
+                      "name": "Example open weather service",
+                      "url": "https://example.org/docs/weather",
+                      "licence": "CC BY 4.0",
+                      "attribution": "Weather data: Example open weather service, CC BY 4.0"
+                    }
+                  ],
+                  "next_refresh": "2026-11-21T12:00:00Z",
+                  "method": "computed",
+                  "price_credits": 1
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/invalid_request"
+          },
+          "402": {
+            "$ref": "#/components/responses/payment_required"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "429": {
+            "$ref": "#/components/responses/rate_limited"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_error"
+          },
+          "503": {
+            "$ref": "#/components/responses/degraded"
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "operationId": "searchCatalog",
+        "summary": "Find public endpoints in the catalog; free, within the caller's rate",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,8})$"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One page of public endpoints, best match first.",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/x-request-id"
+              },
+              "cache-control": {
+                "$ref": "#/components/headers/cache-control"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPage"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "owner": "core",
+                      "slug": "topeka-weather",
+                      "title": "Weather in Topeka",
+                      "summary": "Latest observation at Topeka airport, Kansas: temperature, conditions, wind and humidity.",
+                      "url": "https://api.example.com/@core/topeka-weather",
+                      "price_credits": 1
+                    }
+                  ],
+                  "next_cursor": "b2Zmc2V0OjIw"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/invalid_request"
+          },
+          "429": {
+            "$ref": "#/components/responses/rate_limited"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_error"
+          }
+        }
+      }
+    },
+    "/builds/{id}": {
+      "get": {
+        "operationId": "readBuildStatus",
+        "summary": "Status of a build",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^bld_[0-9a-z_]{1,64}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Where the build is and, once it ended, how.",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/x-request-id"
+              },
+              "cache-control": {
+                "$ref": "#/components/headers/cache-control"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildStatus"
+                },
+                "example": {
+                  "id": "bld_01jd3k8m4q0000000000000000",
+                  "status": "running",
+                  "stage": "test",
+                  "progress": 0.66,
+                  "endpoint": null,
+                  "reason": null
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/invalid_request"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "429": {
+            "$ref": "#/components/responses/rate_limited"
+          },
+          "500": {
+            "$ref": "#/components/responses/internal_error"
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "operationId": "checkHealth",
+        "summary": "Liveness of the gateway",
+        "responses": {
+          "200": {
+            "description": "The gateway is up.",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/x-request-id"
+              },
+              "cache-control": {
+                "$ref": "#/components/headers/cache-control"
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "const": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "JsonValue": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonValue"
+            }
+          },
+          {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            }
+          }
+        ]
+      },
+      "Envelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
+            }
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          "sources": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "licence": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "attribution": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "url",
+                "licence",
+                "attribution"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "next_refresh": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "computed",
+              "model-estimate",
+              "owner-data"
+            ]
+          },
+          "price_credits": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "data",
+          "as_of",
+          "sources",
+          "next_refresh",
+          "method",
+          "price_credits"
+        ],
+        "additionalProperties": false
+      },
+      "ErrorBody": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "building",
+                  "invalid_request",
+                  "payment_required",
+                  "not_found",
+                  "not_buildable",
+                  "rate_limited",
+                  "internal_error",
+                  "degraded"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hint": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "SearchPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_]{2,32}$"
+                },
+                "slug": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 280
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "price_credits": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "owner",
+                "slug",
+                "title",
+                "summary",
+                "url",
+                "price_credits"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "additionalProperties": false
+      },
+      "BuildStatus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^bld_[0-9a-z_]{1,64}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "rejected"
+            ]
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "interpret",
+                  "discover",
+                  "check-policy",
+                  "draft",
+                  "test",
+                  "publish"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "progress": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "stage",
+          "progress",
+          "endpoint",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "headers": {
+      "x-request-id": {
+        "description": "Id of this call; it names the call in every log line.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "cache-control": {
+        "description": "How long a shared cache may keep the answer.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "retry-after": {
+        "description": "Seconds to wait before calling again.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "x-as-of": {
+        "description": "When the value was observed at the source. Shapes other than json.",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "x-next-refresh": {
+        "description": "Earliest time a newer value can exist. Shapes other than json.",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "x-price-credits": {
+        "description": "What this call cost, in credits. Shapes other than json.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "responses": {
+      "invalid_request": {
+        "description": "Malformed path, parameter or shape.",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/x-request-id"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorBody"
+            },
+            "example": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Unknown shape \"xml\".",
+                "hint": "Use one of: json, number, text, csv."
+              }
+            }
+          }
+        }
+      },
+      "payment_required": {
+        "description": "The answer costs more than max_price; nothing was refreshed or charged.",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/x-request-id"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorBody"
+            },
+            "example": {
+              "error": {
+                "code": "payment_required",
+                "message": "This call costs more than max_price.",
+                "hint": "It costs 2 credits; raise max_price or leave it out."
+              }
+            }
+          }
+        }
+      },
+      "not_found": {
+        "description": "No such endpoint or build.",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/x-request-id"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorBody"
+            },
+            "example": {
+              "error": {
+                "code": "not_found",
+                "message": "No such API.",
+                "hint": "Check the owner and the name."
+              }
+            }
+          }
+        }
+      },
+      "rate_limited": {
+        "description": "Too many calls.",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/x-request-id"
+          },
+          "retry-after": {
+            "$ref": "#/components/headers/retry-after"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorBody"
+            },
+            "example": {
+              "error": {
+                "code": "rate_limited",
+                "message": "Too many calls.",
+                "hint": "Retry after 12 seconds."
+              }
+            }
+          }
+        }
+      },
+      "internal_error": {
+        "description": "A defect on the platform's side. The body has no hint.",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/x-request-id"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorBody"
+            },
+            "example": {
+              "error": {
+                "code": "internal_error",
+                "message": "Something went wrong on our side."
+              }
+            }
+          }
+        }
+      },
+      "degraded": {
+        "description": "The source failed and no acceptable value exists. Not charged.",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/x-request-id"
+          },
+          "retry-after": {
+            "$ref": "#/components/headers/retry-after"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorBody"
+            },
+            "example": {
+              "error": {
+                "code": "degraded",
+                "message": "The source is failing and no recent value exists.",
+                "hint": "Retry later. You were not charged."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

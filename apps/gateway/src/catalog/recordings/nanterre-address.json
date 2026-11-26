@@ -1,0 +1,6 @@
+{
+  "url": "https://data.geopf.fr/geocodage/search?q=8+bd+du+port+nanterre&limit=1",
+  "status": 200,
+  "contentType": "application/json",
+  "body": "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[2.178892,48.893461]},\"properties\":{\"label\":\"8 Rue du Port 92000 Nanterre\",\"score\":0.64062,\"housenumber\":\"8\",\"id\":\"92050_7265_00008\",\"name\":\"8 Rue du Port\",\"postcode\":\"92000\",\"citycode\":\"92050\",\"x\":639795.94,\"y\":6866252.14,\"city\":\"Nanterre\",\"context\":\"92, Hauts-de-Seine, Île-de-France\",\"type\":\"housenumber\",\"importance\":0.67182,\"depcode\":\"92\",\"street\":\"Rue du Port\",\"_type\":\"address\"}}],\"query\":\"8 bd du port nanterre\"}"
+}

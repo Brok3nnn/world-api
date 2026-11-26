@@ -1,0 +1,25 @@
+{
+  "name": "@repo/gateway",
+  "version": "1.0.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=../../.env --watch --import ../../scripts/resolve-ts.mjs src/entry/node.ts",
+    "proof": "node --env-file-if-exists=../../.env --import ../../scripts/resolve-ts.mjs src/proof/proof-command.ts ../../docs/proofs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/contracts": "workspace:*",
+    "@repo/core": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/recipes": "workspace:*",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.1",
+    "typescript": "^5",
+    "vitest": "^5.1.1"
+  }
+}

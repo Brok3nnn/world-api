@@ -1,0 +1,51 @@
+{
+  "name": "@repo/core",
+  "version": "1.0.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    "./result": "./src/result/result.ts",
+    "./env/parse-environment": "./src/env/parse-environment.ts",
+    "./ids/id": "./src/ids/id.ts",
+    "./ids/id-generator": "./src/ids/id-generator.ts",
+    "./ids/create-id-generator": "./src/ids/create-id-generator.ts",
+    "./ids/random-source": "./src/ids/random-source.ts",
+    "./ids/testing/fake-random-source": "./src/ids/testing/fake-random-source.ts",
+    "./time/clock": "./src/time/clock.ts",
+    "./time/duration": "./src/time/duration.ts",
+    "./time/testing/fake-clock": "./src/time/testing/fake-clock.ts",
+    "./log/logger": "./src/log/logger.ts",
+    "./log/testing/recording-logger": "./src/log/testing/recording-logger.ts",
+    "./freshness/freshness-seconds": "./src/freshness/freshness-seconds.ts",
+    "./freshness/next-refresh": "./src/freshness/next-refresh.ts",
+    "./freshness/effective-max-age": "./src/freshness/effective-max-age.ts",
+    "./freshness/is-stale": "./src/freshness/is-stale.ts",
+    "./freshness/within-grace": "./src/freshness/within-grace.ts",
+    "./status/endpoint-transitions": "./src/status/endpoint-transitions.ts",
+    "./status/build-transitions": "./src/status/build-transitions.ts",
+    "./status/can-transition": "./src/status/can-transition.ts",
+    "./status/next-endpoint-status": "./src/status/next-endpoint-status.ts",
+    "./pricing/exceeds-price-cap": "./src/pricing/exceeds-price-cap.ts",
+    "./pricing/call-price": "./src/pricing/call-price.ts",
+    "./shape/shape-failure": "./src/shape/shape-failure.ts",
+    "./shape/supported-shapes": "./src/shape/supported-shapes.ts",
+    "./shape/render-number": "./src/shape/render-number.ts",
+    "./shape/render-text": "./src/shape/render-text.ts",
+    "./shape/render-csv": "./src/shape/render-csv.ts",
+    "./sources/usable-source": "./src/sources/usable-source.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.1",
+    "typescript": "^5",
+    "vitest": "^5.1.1",
+    "zod": "^4.6.7"
+  }
+}

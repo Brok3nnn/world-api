@@ -1,0 +1,6 @@
+{
+  "url": "https://api.example.org/v1/stations.csv",
+  "status": 200,
+  "contentType": "text/csv",
+  "body": "Station;Temperatur\nMünchen;4,2\nGöttingen;1,9\n"
+}

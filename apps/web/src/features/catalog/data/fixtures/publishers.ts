@@ -1,0 +1,68 @@
+import type { Publisher } from "../../types";
+
+export const publisherFixtures: readonly Publisher[] = [
+  {
+    handle: "core",
+    displayName: "Core catalog",
+    kind: "platform",
+    verified: true,
+    bio: "Endpoints maintained by the platform from licensed open data.",
+    joinedAt: "2026-09-01T00:00:00Z",
+  },
+  {
+    handle: "mira_field",
+    displayName: "Mira Field Station",
+    kind: "community",
+    verified: true,
+    bio: "Forest research station streaming wildlife counts from trail cameras.",
+    joinedAt: "2026-10-02T00:00:00Z",
+  },
+  {
+    handle: "rooftop_lab",
+    displayName: "Rooftop Lab",
+    kind: "community",
+    verified: true,
+    bio: "Hyperlocal air and noise sensors on city rooftops.",
+    joinedAt: "2026-10-05T00:00:00Z",
+  },
+  {
+    handle: "agro_plots",
+    displayName: "Agro Plots Research",
+    kind: "community",
+    verified: true,
+    bio: "University soil research plots, published per call.",
+    joinedAt: "2026-10-09T00:00:00Z",
+  },
+  {
+    handle: "bee_meadow",
+    displayName: "Bee Meadow",
+    kind: "community",
+    verified: false,
+    bio: "Hobby beekeepers weighing hives every ten minutes.",
+    joinedAt: "2026-10-14T00:00:00Z",
+  },
+  {
+    handle: "corner_grocer",
+    displayName: "Corner Grocer",
+    kind: "community",
+    verified: true,
+    bio: "Neighbourhood shop exposing live stock levels from its inventory system.",
+    joinedAt: "2026-10-20T00:00:00Z",
+  },
+  {
+    handle: "lot_sensors",
+    displayName: "Lot Sensors",
+    kind: "community",
+    verified: true,
+    bio: "Parking occupancy from privacy-first cameras. Counts only, no plates.",
+    joinedAt: "2026-10-28T00:00:00Z",
+  },
+  {
+    handle: "alpine_watch",
+    displayName: "Alpine Watch",
+    kind: "community",
+    verified: true,
+    bio: "Snow depth and slope sensors maintained by a mountain rescue club.",
+    joinedAt: "2026-11-03T00:00:00Z",
+  },
+];

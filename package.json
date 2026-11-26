@@ -1,0 +1,36 @@
+{
+  "name": "world-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "One GET call for a real-world value, in the shape you ask for: a recipe engine with an SSRF-safe egress policy and a portable data API gateway.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev:gateway": "pnpm --filter @repo/gateway dev",
+    "dev:web": "pnpm --filter @repo/web dev",
+    "build": "pnpm --recursive --if-present build",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
+    "typecheck": "pnpm --recursive --if-present typecheck",
+    "test": "pnpm --recursive --if-present test",
+    "knip": "knip",
+    "structure:check": "node scripts/check-structure.mjs",
+    "migrations:check": "node scripts/check-migrations.mjs",
+    "openapi": "node --import ./scripts/resolve-ts.mjs scripts/openapi.mjs",
+    "openapi:check": "node --import ./scripts/resolve-ts.mjs scripts/openapi.mjs --check",
+    "proof:recipe": "pnpm --filter @repo/recipes proof",
+    "proof:gateway": "pnpm --filter @repo/gateway proof",
+    "check": "pnpm lint && pnpm typecheck && pnpm knip && pnpm structure:check && pnpm migrations:check && pnpm openapi:check",
+    "verify": "pnpm check && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.2",
+    "@repo/contracts": "workspace:*",
+    "knip": "^6.47.0"
+  },
+  "packageManager": "pnpm@11.28.6"
+}
