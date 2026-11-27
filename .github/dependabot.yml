@@ -1,14 +1,23 @@
 version: 2
 updates:
+  # One grouped pull request a month. Major upgrades are done by hand.
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # Biome releases change formatting and lint rules across the tree; upgrade it by hand.
+      - dependency-name: "@biomejs/biome"
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      github-actions:
+        patterns: ["*"]
