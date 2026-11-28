@@ -27,6 +27,13 @@ const DEGRADED: ErrorAnswer = {
   hint: "Try again later.",
 };
 
+/** The same outcome when a source may not be read at all, so trying again cannot help. */
+const SOURCE_NOT_USABLE: ErrorAnswer = {
+  code: "degraded",
+  message: "A source of this endpoint may not be read, and no acceptable value exists.",
+  hint: "A source is read only while its terms were checked within the last 90 days. Retrying does not help until that check is renewed.",
+};
+
 /**
  * Runs the active recipe, passes its value through the output firewall, and stores it as the
  * latest value and in the history. A failure is a code and a step, never a value.
@@ -111,17 +118,23 @@ export async function refreshValue(
   return servedWithinGrace(endpoint, latest, deps.clock.now());
 }
 
-/** The stored value while it is within its grace period, or `503 degraded`. */
+/**
+ * The stored value while it is within its grace period, or `503 degraded`, which says so when a
+ * source of the endpoint may not be read, such as one whose terms check is over 90 days old.
+ */
 export function servedWithinGrace(
   endpoint: ServedEndpoint,
   latest: LatestValue,
   now: Date,
 ): Result<StoredValue, ErrorAnswer> {
   const stored = latest.value;
-  const servable =
-    stored !== null && withinGrace(stored.fetchedAt, endpoint.definition.freshness, now);
+  if (stored !== null && withinGrace(stored.fetchedAt, endpoint.definition.freshness, now)) {
+    return ok(stored);
+  }
+  const unusable = usableSources(endpoint.sources, now).length < endpoint.sources.length;
   // A newer value can exist one freshness interval from now at the soonest.
-  return servable
-    ? ok(stored)
-    : err({ ...DEGRADED, retryAfterS: FRESHNESS_SECONDS[endpoint.definition.freshness] });
+  return err({
+    ...(unusable ? SOURCE_NOT_USABLE : DEGRADED),
+    retryAfterS: FRESHNESS_SECONDS[endpoint.definition.freshness],
+  });
 }

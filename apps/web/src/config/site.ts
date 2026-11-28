@@ -5,7 +5,7 @@
 export const siteConfig = {
   title: "Real-world data API",
   description:
-    "Describe the data you need and get a stable GET endpoint that answers in JSON, a number, a sentence, CSV or a probability.",
+    "Design prototype of a real-world data API: one GET call answers in JSON, a number, a sentence or CSV.",
   /** Placeholder hosts. `example.com` is reserved for documentation (RFC 2606). */
   appBaseUrl: "https://app.example.com",
   apiBaseUrl: "https://api.example.com",

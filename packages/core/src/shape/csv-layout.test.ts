@@ -20,6 +20,23 @@ describe("csvLayout", () => {
     expect(csvLayout(spec)).toEqual({ kind: "row", columns: ["temperature_c", "raining"] });
   });
 
+  it("puts the required fields first, in their listed order, whatever the order of the keys", () => {
+    const spec: OutputSpec = {
+      schema: {
+        type: "object",
+        properties: {
+          city: { type: "string" },
+          note: { type: "string" },
+          label: { type: "string" },
+        },
+        required: ["label", "city"],
+        additionalProperties: false,
+      },
+    };
+
+    expect(csvLayout(spec)).toEqual({ kind: "row", columns: ["label", "city", "note"] });
+  });
+
   it("makes each item of a single list of flat objects a row", () => {
     const spec = specOf({ departures: { type: "array", items: ROW } });
 

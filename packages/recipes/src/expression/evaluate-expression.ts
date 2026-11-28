@@ -22,7 +22,7 @@ const TOO_DEEP = "D1011";
 class OutOfTime extends Error {}
 
 /** Functions of the language that read the clock, randomness or run text as code. */
-const DISABLED = ["now", "millis", "random", "eval"];
+const DISABLED = ["now", "millis", "random", "shuffle", "eval"];
 
 function disabled(): never {
   throw new Error("This function is not available in a recipe.");

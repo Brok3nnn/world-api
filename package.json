@@ -4,6 +4,11 @@
   "private": true,
   "description": "One GET call for a real-world value, in the shape you ask for: a recipe engine with an SSRF-safe egress policy and a portable data API gateway.",
   "license": "AGPL-3.0-only",
+  "author": "Balint Vitan (https://github.com/Brok3nnn)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brok3nnn/world-api.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=24"

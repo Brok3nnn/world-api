@@ -5,9 +5,10 @@ and how to propose one. By taking part you agree to the [Code of Conduct](CODE_O
 
 ## Setup
 
-You need Node.js 24 or newer and pnpm 11 (`corepack enable` picks up the pinned version from
-`package.json`). Nothing else: the database is an in-process Postgres, so no container, service
-or account is needed.
+You need Node.js 24 or newer and pnpm 11.28.6, the version pinned in `package.json`.
+`npm install --global pnpm@11.28.6` installs it with the npm that comes with Node; on Node 24,
+`corepack enable` works too, but Node 25 and later no longer ship corepack. Nothing else: the
+database is an in-process Postgres, so no container, service or account is needed.
 
 ```bash
 git clone https://github.com/Brok3nnn/world-api.git
@@ -55,15 +56,15 @@ the registry only with its licence, attribution and terms recorded from its own 
 
 ## Commit messages
 
-[Conventional Commits](https://www.conventionalcommits.org/) with the workspace as scope:
+A clear subject in the imperative mood, at most 72 characters and without a trailing period,
+then a body that says why:
 
 ```
-feat(gateway): render the csv shape
-fix(recipes): refuse a redirect to a private address
-docs: explain the 90-day source check
+Render the csv shape
+Refuse a redirect to a private address
+Explain the 90-day source check
 ```
 
-The subject is imperative, at most 72 characters, with no trailing period; the body says why.
 One logical change per commit.
 
 ## Proposing a change

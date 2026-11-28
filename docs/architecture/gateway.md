@@ -38,7 +38,9 @@ output firewall, reads other endpoints through `mix-reader` and allows only the 
 | `build-status` | `/builds/{id}` | `read-query`, `limit-rate` and the `BuildQueue` port |
 | `endpoint-value` | `/@{owner}/{slug}` | The stages above |
 
-Any other path, and any method but `GET`, is `404 not_found`.
+Any other path, and any method but `GET`, is `404 not_found`. A request the Fetch API cannot
+represent, such as `TRACE` or a malformed `Host` header, never reaches the app:
+`entry/node-server.ts` answers it with `400 invalid_request` and a request id of its own.
 
 ## Reading and refreshing a value
 

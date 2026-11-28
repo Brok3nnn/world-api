@@ -16,7 +16,7 @@ export default async function HomePage() {
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-4 md:px-6 md:py-6">
       <section className="noise flex flex-col items-center gap-4 rounded-3xl bg-hero px-4 py-10 text-center text-white md:py-14">
         <Eyebrow live tone="inverse">
-          {formatNumber(stats.endpointCount)} live APIs
+          {formatNumber(stats.endpointCount)} sample APIs
         </Eyebrow>
         <h1 className="font-heading text-4xl md:text-5xl">Any live data, one link away.</h1>
         <p className="text-white/85">Describe it. Get a link your app or AI can use.</p>

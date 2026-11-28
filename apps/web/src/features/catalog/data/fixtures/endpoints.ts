@@ -45,7 +45,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_weather_now",
     slug: "weather-now",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Weather now",
     summary: "Temperature, wind and precipitation for any city, refreshed every 15 minutes.",
     description:
@@ -87,7 +87,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_rain_next_hour",
     slug: "rain-next-hour",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Rain next hour",
     summary: "Probability of rain within the next hour for any coordinate, with calibration.",
     description:
@@ -127,7 +127,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_air_quality",
     slug: "air-quality",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Air quality",
     summary: "PM2.5, PM10 and the air quality index for monitoring stations across Europe.",
     description:
@@ -165,7 +165,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_fx_eur_huf",
     slug: "fx-eur-huf",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "EUR/HUF rate",
     summary: "Daily central bank reference rate, reusable with attribution.",
     description:
@@ -207,7 +207,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_crypto_btc_usd",
     slug: "btc-usd",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Bitcoin price",
     summary: "Volume-weighted spot price across public exchange market data feeds.",
     description:
@@ -249,7 +249,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_tech_top_story",
     slug: "tech-top-story",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Top tech story",
     summary: "Title, link and score of the leading story on a tech community front page.",
     description:
@@ -290,7 +290,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_repo_stars",
     slug: "repo-stars",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Repo stars",
     summary: "Star count and weekly growth for any public code repository.",
     description: "From the official API of a public code hosting service, within its rate limits.",
@@ -327,7 +327,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_package_downloads",
     slug: "package-downloads",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Package downloads",
     summary: "Weekly download count for any package in a public JavaScript registry.",
     description: "Read from the public registry download statistics API.",
@@ -364,7 +364,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_encyclopedia_summary",
     slug: "encyclopedia-summary",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Topic summary",
     summary: "A short, attributed summary of any topic from a free-licence encyclopedia.",
     description: "Free-licence content, returned with attribution in every response.",
@@ -401,7 +401,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_geocode",
     slug: "geocode",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Address lookup",
     summary: "Latitude and longitude for any address, from open map data.",
     description: "Geocoding on open map data. Results carry the database licence attribution.",
@@ -435,7 +435,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_danube_level",
     slug: "danube-level-budapest",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Danube level",
     summary:
       "River gauge reading in centimetres, every 15 minutes, from the national hydrology service.",
@@ -466,7 +466,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_power_price",
     slug: "day-ahead-power-price",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Power price",
     summary: "Hourly day-ahead electricity price per bidding zone.",
     description: "Transparency platform open data, published daily for the next day.",
@@ -501,7 +501,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_transit_delays",
     slug: "transit-delays",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Transit delays",
     summary: "Average delay and disrupted lines from the city's real-time transit feed.",
     description: "Real-time feed published by the city transport authority under an open licence.",
@@ -538,7 +538,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_remote_dev_jobs",
     slug: "remote-dev-jobs",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Remote dev jobs",
     summary: "Number of open remote developer roles from job boards with open feeds.",
     description: "Aggregated from job boards that publish open feeds and ask for attribution.",
@@ -758,7 +758,7 @@ export const endpointFixtures: readonly Endpoint[] = [
   {
     id: "ep_morning_brief",
     slug: "morning-brief",
-    publisherHandle: "core",
+    publisherHandle: "sample",
     title: "Morning brief",
     summary: "Vienna weather, the EUR/HUF rate and the top tech story in a single JSON.",
     description:

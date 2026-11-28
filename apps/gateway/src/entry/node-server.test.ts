@@ -1,4 +1,5 @@
 import type { Server } from "node:http";
+import { connect } from "node:net";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createApp } from "../app";
@@ -23,6 +24,19 @@ beforeAll(async () => {
 afterAll(async () => {
   await new Promise((resolve) => server.close(resolve));
 });
+
+/** What the server sends back for a raw HTTP request, status line and headers included. */
+function rawAnswer(raw: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const socket = connect(Number(new URL(base).port), "127.0.0.1", () => socket.end(raw));
+    let answer = "";
+    socket.on("data", (chunk) => {
+      answer += String(chunk);
+    });
+    socket.on("end", () => resolve(answer));
+    socket.on("error", reject);
+  });
+}
 
 describe("serveNode", () => {
   it("serves /healthz from an in-process server, with its request id", async () => {
@@ -54,5 +68,16 @@ describe("serveNode", () => {
 
     expect(response.status).toBe(404);
     expect(await response.json()).toMatchObject({ error: { code: "not_found" } });
+  });
+
+  it.each([
+    ["a method the Fetch API refuses", "TRACE /healthz HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n"],
+    ["a malformed Host header", "GET /healthz HTTP/1.1\r\nHost: a b\r\n\r\n"],
+  ])("answers %s with 400 and its request id, and keeps serving", async (_case, raw) => {
+    const answer = await rawAnswer(raw);
+
+    expect(answer.split("\r\n")[0]).toBe("HTTP/1.1 400 Bad Request");
+    expect(answer).toMatch(/\r\nx-request-id: req_[0-9a-z]{16}\r\n/);
+    expect((await fetch(`${base}/healthz`)).status).toBe(200);
   });
 });

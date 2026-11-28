@@ -79,11 +79,11 @@ engine cannot use, fails with `pattern_no_match`.
 
 Expressions are JSONata ([decision 0012](../decisions/0012-recipe-expression-and-pattern-languages.md)),
 evaluated against one object that holds every earlier step's result under its step id, without
-any I/O. `$now`, `$millis`, `$random` and `$eval` are disabled, and a regular expression literal
-is refused because it could backtrack without end: patterns belong in `text.match`. Evaluation
-stops with `limit_exceeded` past `RUN_LIMITS.expressionMs`, measured with the run's clock, or
-past `RUN_LIMITS.expressionDepth`. An expression that yields nothing, or anything that is not
-JSON, fails with `expression_failed`.
+any I/O. `$now`, `$millis`, `$random`, `$shuffle` and `$eval` are disabled, and a regular
+expression literal is refused because it could backtrack without end: patterns belong in
+`text.match`. Evaluation stops with `limit_exceeded` past `RUN_LIMITS.expressionMs`, measured
+with the run's clock, or past `RUN_LIMITS.expressionDepth`. An expression that yields nothing,
+or anything that is not JSON, fails with `expression_failed`.
 
 Reserved step kinds, **Planned** and not available: `model.extract` (a small model reads
 unstructured content) and `code.run` (an isolated program for sources the steps above cannot

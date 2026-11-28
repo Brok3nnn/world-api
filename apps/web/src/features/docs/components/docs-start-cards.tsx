@@ -24,7 +24,7 @@ const START_CARDS: readonly StartCard[] = [
   },
   {
     title: "Connect an agent",
-    description: "One MCP server with two tools.",
+    description: "Planned: one MCP server with two tools.",
     icon: PlugIcon,
     href: "/docs#agents",
   },

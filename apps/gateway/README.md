@@ -25,7 +25,9 @@ through the recipe engine when it is stale. The design is in
 | `src/entry/` | `local-gateway` (the seeded in-process database, Postgres adapters and the real engine), the Node entry, and the server that adapts Node's HTTP to the app |
 | `src/proof/` | Proof B: `proveGateway`, its report, and the `proof` command (`pnpm proof:gateway`) |
 
-Every adapter of a port runs the same tests, kept beside the port in `src/ports/testing/`.
+The endpoint directory, value store, endpoint status store and catalog search each have one
+shared suite in `src/ports/testing/`, run against their memory and Postgres adapters; the other
+adapters are tested one by one.
 
 `pnpm dev:gateway` starts it on `127.0.0.1:8787`: it migrates and seeds an in-process Postgres
 (PGlite) with the six catalog endpoints, then refreshes each from its live source on the first
@@ -38,7 +40,9 @@ call. It reads `USER_AGENT_CONTACT` and `LOG_LEVEL` from the environment or the 
   and commands (lint), and `portable-app.test.ts` runs every route through Web-standard objects.
 - No HTTP framework: a route table of Web-standard functions keeps the gateway portable to edge
   isolates without a dependency (decision 0003).
-- Every response carries `x-request-id`. Expected outcomes are values; the one `catch` in
-  `app.ts` turns a defect into `500 internal_error` with no detail for the caller.
+- Every response carries `x-request-id`. Expected outcomes are values; the one `catch` for
+  defects, in `app.ts`, turns a defect into `500 internal_error` with no detail for the caller.
+  `entry/node-server.ts` answers a request the Fetch API cannot represent, such as `TRACE`, with
+  `400 invalid_request` before it reaches the app.
 - Depends on `@repo/contracts`, `@repo/core`, `@repo/recipes` and `@repo/db`.
 - Coverage floor: 90 % for lines, branches, functions and statements.

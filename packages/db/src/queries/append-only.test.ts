@@ -1,8 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-const QUERIES = new URL(".", import.meta.url).pathname;
+const QUERIES = fileURLToPath(new URL(".", import.meta.url));
 /** The tables the data model declares append-only, by their schema names in code. */
 const APPEND_ONLY = ["valuesHistory", "usageEvents", "buildEvents"];
 

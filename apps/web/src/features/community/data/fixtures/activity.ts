@@ -27,10 +27,10 @@ export const activityFixtures: readonly ActivityEvent[] = [
   {
     id: "act_morning_brief",
     kind: "published",
-    actorHandle: "core",
+    actorHandle: "sample",
     description: "published Morning brief",
     occurredAt: "2026-11-21T08:15:00Z",
-    endpoint: { publisherHandle: "core", slug: "morning-brief" },
+    endpoint: { publisherHandle: "sample", slug: "morning-brief" },
   },
   {
     id: "act_parking_like",
@@ -59,9 +59,9 @@ export const activityFixtures: readonly ActivityEvent[] = [
   {
     id: "act_weather_milestone",
     kind: "milestone",
-    actorHandle: "core",
+    actorHandle: "sample",
     description: "Weather now reached 99.96% uptime",
     occurredAt: "2026-11-19T09:00:00Z",
-    endpoint: { publisherHandle: "core", slug: "weather-now" },
+    endpoint: { publisherHandle: "sample", slug: "weather-now" },
   },
 ];

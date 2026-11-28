@@ -23,7 +23,7 @@ export default async function MarketplacePage() {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-6 md:px-6 md:py-8">
       <PageHeader
-        eyebrow={<Eyebrow live>{formatNumber(endpoints.length)} live APIs</Eyebrow>}
+        eyebrow={<Eyebrow live>{formatNumber(endpoints.length)} sample APIs</Eyebrow>}
         title="Explore"
         description="Live data, ready for your app or AI."
       />

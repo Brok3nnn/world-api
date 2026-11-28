@@ -82,6 +82,25 @@ describe("refreshValue", () => {
     });
   });
 
+  it("says that retrying does not help when a source's terms check is over 90 days old", async () => {
+    const endpoint = servedEndpoint();
+    const lapsed = {
+      ...endpoint,
+      sources: endpoint.sources.map((source) => ({
+        ...source,
+        policyCheckedAt: new Date("2026-08-01T00:00:00Z"),
+      })),
+    };
+
+    const refreshed = await refreshValue(lapsed, NOTHING, refreshDeps({ runner: FAILING }));
+
+    expect(refreshed.ok ? null : refreshed.error).toMatchObject({
+      code: "degraded",
+      message: "A source of this endpoint may not be read, and no acceptable value exists.",
+      retryAfterS: 900,
+    });
+  });
+
   it("neither stores nor returns a value the firewall refuses, and counts it as a failure", async () => {
     const runner = createFakeRecipeRunner(
       ok({ data: { temperature_c: "warm" }, asOf: new Date() }),

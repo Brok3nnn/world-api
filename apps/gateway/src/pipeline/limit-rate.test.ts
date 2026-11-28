@@ -2,8 +2,9 @@ import { errorBodySchema } from "@repo/contracts/api/error";
 import { createRecordingLogger } from "@repo/core/log/testing/recording-logger";
 import { describe, expect, it } from "vitest";
 import { createApp } from "../app";
+import type { RateLimiter } from "../ports/rate-limiter";
 import { storedValue, testDeps, valuesWith } from "../testing/test-deps";
-import { ANONYMOUS_CALLS } from "./limit-rate";
+import { ANONYMOUS_CALLS, limitRate } from "./limit-rate";
 
 function gateway() {
   const logger = createRecordingLogger();
@@ -25,6 +26,17 @@ describe("limitRate", () => {
     expect(limited.status).toBe(429);
     expect(limited.headers.get("retry-after")).toBe("1");
     expect(errorBodySchema.parse(await limited.json()).error.code).toBe("rate_limited");
+  });
+
+  it.each([
+    [1, "Retry after 1 second."],
+    [12, "Retry after 12 seconds."],
+  ])("tells a caller who must wait %i s when to retry", async (retryAfterS, hint) => {
+    const limiter: RateLimiter = { take: async () => ({ allowed: false, retryAfterS }) };
+
+    const limited = await limitRate({ kind: "anonymous", limitKey: "203.0.113.7" }, limiter);
+
+    expect(limited.ok ? null : limited.error).toMatchObject({ hint, retryAfterS });
   });
 
   it("limits each address on its own, and never writes an address down", async () => {

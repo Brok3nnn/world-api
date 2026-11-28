@@ -35,7 +35,7 @@ const document = sql`to_tsvector('simple', ${endpoints.title} || ' ' || ${endpoi
 /**
  * Public endpoints that answer calls and match the words of `query`, best match first. Pages
  * by offset, as the order is a ranking and not a key; the cursor is opaque and bounded, and one
- * this query did not issue is refused. Any text is a valid query.
+ * this query did not issue is refused. Any text without a NUL character is a valid query.
  */
 export async function searchCatalogEndpoints(
   db: Database,

@@ -14,7 +14,7 @@ import { CATALOG_RECORDINGS } from "../catalog/testing/catalog-recordings";
 import { LOG_EVENTS } from "../log-events";
 import { createLocalGateway } from "./local-gateway";
 
-/** When the recordings were made; the sources' terms were checked four days before. */
+/** When the recordings were made, on the day the sources' terms were checked. */
 const RECORDED_AT = new Date("2026-11-22T21:07:00.000Z");
 
 /** Every catalog host resolves to one public address; the recordings answer every request. */
@@ -117,6 +117,14 @@ describe("createLocalGateway", () => {
     expect(client.requests).toHaveLength(fetched);
   });
 
+  it("keeps the column order of the output spec in csv, although jsonb sorts the keys", async () => {
+    const { call } = await localGateway();
+
+    const csv = await (await call("/@core/nanterre-address?shape=csv")).text();
+
+    expect(csv.split("\r\n")[0]).toBe("label,latitude,longitude,postcode,city");
+  });
+
   it("finds the seeded catalog with search", async () => {
     const { call } = await localGateway();
 
@@ -146,7 +154,10 @@ describe("createLocalGateway", () => {
       ]),
     );
     expect(response.status).toBe(503);
-    expect(errorBodySchema.parse(await response.json()).error.code).toBe("degraded");
+    expect(errorBodySchema.parse(await response.json()).error).toMatchObject({
+      code: "degraded",
+      message: "A source of this endpoint may not be read, and no acceptable value exists.",
+    });
     expect(client.requests).toEqual([]);
   });
 });

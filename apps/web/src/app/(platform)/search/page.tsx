@@ -17,7 +17,7 @@ export default async function SearchPage() {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-6 md:px-6 md:py-8">
       <header className="flex flex-col items-center gap-3 text-center">
-        <Eyebrow live>{formatNumber(endpoints.length)} live APIs</Eyebrow>
+        <Eyebrow live>{formatNumber(endpoints.length)} sample APIs</Eyebrow>
         <h1 className="font-heading text-4xl text-ink-950 md:text-5xl">Search</h1>
         <p className="max-w-xl text-pretty text-muted-foreground md:text-lg">
           Find it, or build it if it is missing.

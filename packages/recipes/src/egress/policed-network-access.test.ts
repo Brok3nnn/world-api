@@ -1,8 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-const SOURCE = new URL("..", import.meta.url).pathname;
+const SOURCE = fileURLToPath(new URL("..", import.meta.url));
 
 /** Every source file of the package that is not a test or a test double. */
 function sources(): { file: string; text: string }[] {

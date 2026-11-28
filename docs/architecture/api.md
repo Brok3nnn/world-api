@@ -17,7 +17,9 @@ is a `GET`. The schemas in `packages/contracts` are the source of truth and gene
 
 `owner` matches `[a-z0-9_]{2,32}`; `slug` matches `[a-z0-9]+(-[a-z0-9]+)*`, at most 64
 characters, read as sent: a percent-encoded character is not one of them. Anything else is
-`400 invalid_request`. Any other path, and any method but `GET`, is `404 not_found`.
+`400 invalid_request`. Any other path, and any method but `GET`, is `404 not_found`. A request
+the Fetch API cannot represent, such as `TRACE` or a malformed `Host` header, is
+`400 invalid_request` from the Node server.
 
 ## Query parameters of an endpoint call
 
@@ -97,7 +99,7 @@ Every error is JSON with one stable machine code and what the caller should do:
 | `404` | `not_found` | No such endpoint, build or route. A `private`, `building` or `disabled` endpoint gets the same answer, so its existence is not revealed |
 | `429` | `rate_limited` | Too many calls; `retry-after` gives the seconds to wait |
 | `500` | `internal_error` | A defect; the body has a generic message and no hint |
-| `503` | `degraded` | The source failed and no acceptable value exists |
+| `503` | `degraded` | The source failed, or may not be read because its terms check is over 90 days old, and no acceptable value exists; the message says which |
 
 `hint` is present on every error except `internal_error`, whose request is identified by the
 `x-request-id` header. The planned `/get` route adds `202 building` and `404 not_buildable`;

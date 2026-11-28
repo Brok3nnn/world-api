@@ -76,6 +76,7 @@ describe("evaluateExpression", () => {
     ["the clock through $now", "$now()"],
     ["the clock through $millis", "$millis()"],
     ["randomness", "$random()"],
+    ["randomness through $shuffle", "$shuffle([1, 2, 3])"],
     ["text run as code", '$eval("1 + 1")'],
     ["a global of the runtime", "$globalThis"],
     ["a regular expression literal", '$match("aaa", /a+/)'],

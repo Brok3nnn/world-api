@@ -13,12 +13,19 @@ function isScalar(node: OutputSchemaNode): boolean {
   return node.type === "string" || node.type === "number" || node.type === "boolean";
 }
 
-/** The column names of an object whose fields are all scalars, or `null`. */
+/**
+ * The column names of an object whose fields are all scalars, or `null`. Required fields come
+ * first, in the order the spec lists them: Postgres `jsonb` does not keep the order of keys.
+ */
 function flatColumns(node: OutputSchemaNode): string[] | null {
   if (node.type !== "object") {
     return null;
   }
-  const names = Object.keys(node.properties);
+  const required = node.required ?? [];
+  const names = [
+    ...required,
+    ...Object.keys(node.properties).filter((name) => !required.includes(name)),
+  ];
   const flat = names.length > 0 && Object.values(node.properties).every(isScalar);
   return flat ? names : null;
 }

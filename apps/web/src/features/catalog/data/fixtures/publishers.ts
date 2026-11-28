@@ -2,11 +2,11 @@ import type { Publisher } from "../../types";
 
 export const publisherFixtures: readonly Publisher[] = [
   {
-    handle: "core",
-    displayName: "Core catalog",
+    handle: "sample",
+    displayName: "Sample catalog",
     kind: "platform",
     verified: true,
-    bio: "Endpoints maintained by the platform from licensed open data.",
+    bio: "Made-up platform endpoints that show how the catalog of licensed open data would look.",
     joinedAt: "2026-09-01T00:00:00Z",
   },
   {

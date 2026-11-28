@@ -1,5 +1,11 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
+import type { RandomSource } from "@repo/core/ids/random-source";
 import type { Gateway } from "../app";
+import { assignRequestId } from "../pipeline/assign-request-id";
+import { errorResponse } from "../responses/error-response";
+
+/** The randomness of the request ids this server assigns itself. */
+const RANDOM: RandomSource = { bytes: (length) => crypto.getRandomValues(new Uint8Array(length)) };
 
 /**
  * The incoming request as a Web-standard one, on the origin the caller used. Its body is
@@ -20,22 +26,46 @@ function toRequest(incoming: IncomingMessage): Request {
   return new Request(url, { method: String(incoming.method), headers });
 }
 
+/**
+ * The answer to a request that Node accepts but the Fetch API cannot represent, such as `TRACE`
+ * or a malformed `Host` header. It never reaches the gateway, so it gets its request id here.
+ */
+function malformedRequest(): Response {
+  const response = errorResponse({
+    code: "invalid_request",
+    message: "The request is malformed.",
+    hint: "Send a GET request with a valid Host header.",
+  });
+  response.headers.set("x-request-id", assignRequestId(RANDOM));
+  return response;
+}
+
+async function write(outgoing: ServerResponse, response: Response): Promise<void> {
+  outgoing.writeHead(response.status, Object.fromEntries(response.headers));
+  outgoing.end(Buffer.from(await response.arrayBuffer()));
+}
+
 async function respond(
   gateway: Gateway,
   incoming: IncomingMessage,
   outgoing: ServerResponse,
 ): Promise<void> {
-  const response = await gateway(toRequest(incoming), {
-    address: incoming.socket.remoteAddress ?? "unknown",
-  });
-  outgoing.writeHead(response.status, Object.fromEntries(response.headers));
-  outgoing.end(Buffer.from(await response.arrayBuffer()));
+  let request: Request;
+  try {
+    request = toRequest(incoming);
+  } catch {
+    // The Fetch API refuses this request; Node does not, so it is answered here.
+    await write(outgoing, malformedRequest());
+    return;
+  }
+  const response = await gateway(request, { address: incoming.socket.remoteAddress ?? "unknown" });
+  await write(outgoing, response);
 }
 
 /** Serves the gateway with Node's HTTP server on the loopback interface; resolves once listening. */
 export function serveNode(gateway: Gateway, port: number): Promise<Server> {
   const server = createServer((incoming, outgoing) => {
-    void respond(gateway, incoming, outgoing);
+    respond(gateway, incoming, outgoing).catch(() => outgoing.destroy());
   });
   return new Promise((resolve) => server.listen(port, "127.0.0.1", () => resolve(server)));
 }

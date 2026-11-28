@@ -22,9 +22,13 @@ export function DocsReference() {
       <ContentSection
         id="quickstart"
         title="Quickstart"
-        description="Ask in plain language and get a working answer. Every answer comes with a permanent URL you can call directly from then on."
+        description="Planned: ask in plain language and get a working answer. Every answer comes with a permanent URL you can call directly from then on."
       >
-        <CodeBlock title="Ask anything" code={QUICKSTART_SNIPPET} copyLabel="Copy quickstart" />
+        <CodeBlock
+          title="Ask anything (planned)"
+          code={QUICKSTART_SNIPPET}
+          copyLabel="Copy quickstart"
+        />
         <CodeBlock
           title="Call the permanent URL"
           code={PERMANENT_URL_SNIPPET}
@@ -78,7 +82,7 @@ export function DocsReference() {
       <ContentSection
         id="agents"
         title="Agents"
-        description="One MCP server with two tools. The same server connects to any MCP-capable assistant."
+        description="Planned: one MCP server with two tools. The same server connects to any MCP-capable assistant."
       >
         <CopyField label="MCP" value={siteConfig.mcpUrl} copyLabel="Copy MCP server URL" />
         <McpToolList />

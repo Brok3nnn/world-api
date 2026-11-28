@@ -15,10 +15,11 @@ export async function limitRate(
   if (decision.allowed) {
     return ok(undefined);
   }
+  const unit = decision.retryAfterS === 1 ? "second" : "seconds";
   return err({
     code: "rate_limited",
     message: "Too many calls.",
-    hint: `Retry after ${decision.retryAfterS} seconds.`,
+    hint: `Retry after ${decision.retryAfterS} ${unit}.`,
     retryAfterS: decision.retryAfterS,
   });
 }

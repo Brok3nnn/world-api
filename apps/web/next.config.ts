@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Keep `next dev` from writing AGENTS.md when an AI coding agent runs it.
+  agentRules: false,
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,

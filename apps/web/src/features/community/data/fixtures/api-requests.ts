@@ -24,7 +24,7 @@ export const apiRequestFixtures: readonly ApiRequest[] = [
     createdAt: "2026-09-18T08:05:00Z",
     votes: 342,
     status: "shipped",
-    endpoint: { publisherHandle: "core", slug: "danube-level-budapest" },
+    endpoint: { publisherHandle: "sample", slug: "danube-level-budapest" },
   },
   {
     id: "req_lake_temperature",

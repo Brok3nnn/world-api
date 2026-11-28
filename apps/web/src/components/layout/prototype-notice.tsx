@@ -13,7 +13,8 @@ export function PrototypeNotice() {
         <span>
           <strong className="font-semibold text-ink-950">UI prototype — sample data.</strong>{" "}
           Endpoints, numbers, publishers, accounts and keys here are fictional. Nothing is fetched,
-          charged or stored beyond this browser.
+          charged or stored beyond this browser. Creating APIs, probability answers and the MCP
+          server are planned, not built.
         </span>
       </p>
     </aside>

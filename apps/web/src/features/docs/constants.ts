@@ -26,7 +26,7 @@ export const QUICKSTART_SNIPPET = [
 ].join("\n");
 
 export const PERMANENT_URL_SNIPPET = [
-  `curl "${siteConfig.apiBaseUrl}/@core/fx-eur-huf" \\`,
+  `curl "${siteConfig.apiBaseUrl}/@sample/fx-eur-huf" \\`,
   `  -H "Authorization: Bearer $DATA_API_KEY"`,
 ].join("\n");
 
@@ -36,14 +36,23 @@ interface ReferenceRow {
 }
 
 export const PARAMETERS: readonly ReferenceRow[] = [
-  { name: "q", description: "Natural-language question for /get. A catalog hit answers at once." },
-  { name: "shape", description: "json (default), number, text, csv or probability." },
-  { name: "sources", description: "Comma-separated endpoints to mix into one response." },
-  { name: "refresh", description: "Refresh interval for a new mix: 1m, 5m, 15m, 1h or 1d." },
-  { name: "ask", description: "Question about the data, answered as a probability." },
+  {
+    name: "q",
+    description: "Planned. Natural-language question for /get; a catalog hit answers at once.",
+  },
+  { name: "shape", description: "json (default), number, text or csv; probability is planned." },
+  { name: "sources", description: "Planned. Comma-separated endpoints to mix into one response." },
+  {
+    name: "refresh",
+    description: "Planned. Refresh interval for a new mix: 1m, 5m, 15m, 1h or 1d.",
+  },
+  { name: "ask", description: "Planned. Question about the data, answered as a probability." },
   { name: "max_age", description: "Accept cached values at most this many seconds old." },
   { name: "max_price", description: "Cost cap in credits. A pricier answer returns 402 instead." },
-  { name: "wait", description: "Seconds to wait for a build to finish instead of getting 202." },
+  {
+    name: "wait",
+    description: "Planned. Seconds to wait for a build to finish instead of getting 202.",
+  },
 ];
 
 export const RESPONSE_EXAMPLE = JSON.stringify(
@@ -89,7 +98,8 @@ export const ERROR_CODES: readonly ErrorCode[] = [
   {
     status: 202,
     name: "Building",
-    action: "Nothing matched, so a build started. Poll the build_id or retry with wait=30.",
+    action:
+      "Planned, with /get: nothing matched, so a build started. Poll the build_id or retry with wait=30.",
   },
   {
     status: 402,
@@ -99,7 +109,8 @@ export const ERROR_CODES: readonly ErrorCode[] = [
   {
     status: 404,
     name: "Not buildable",
-    action: "No permitted or reliable source exists. You are not charged; rephrase the question.",
+    action:
+      "Planned, with /get: no permitted or reliable source exists. You are not charged; rephrase the question.",
   },
   {
     status: 429,
@@ -110,7 +121,7 @@ export const ERROR_CODES: readonly ErrorCode[] = [
     status: 503,
     name: "Degraded",
     action:
-      "The source changed and the endpoint is self-healing. Not billed; retry or set max_age.",
+      "The source failed and no acceptable value exists. Not billed; retry later or set max_age. Self-healing is planned.",
   },
 ];
 

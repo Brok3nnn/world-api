@@ -20,6 +20,7 @@ describe("searchParametersSchema", () => {
     ["no query", {}],
     ["a query of only spaces", { q: "   " }],
     ["a query of 201 characters", { q: "a".repeat(201) }],
+    ["a query with a NUL character", { q: "rain\u0000" }],
     ["a page size of zero", { q: "rain", limit: "0" }],
     ["a page size above the maximum", { q: "rain", limit: "51" }],
     ["an empty cursor", { q: "rain", cursor: "" }],

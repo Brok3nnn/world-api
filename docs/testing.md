@@ -11,7 +11,7 @@ on every `pnpm test`.
 | Unit | A pure function or a pipeline stage behaves for every case | Nothing outside the process | `*.test.ts` next to the source |
 | Integration | An adapter or a query works against the real technology | In-process Postgres (PGlite); an HTTP server on the loopback interface | `*.test.ts` next to the source |
 | Contract | A response matches the public contract and the OpenAPI document | The gateway built from fakes | `apps/gateway/src/routes/*.test.ts` |
-| Port contract | Every adapter of a port behaves the same | One shared suite per port, run against the memory and the Postgres adapter | `apps/gateway/src/ports/testing/` |
+| Port contract | The memory and the Postgres adapter of a port behave the same | One shared suite each for the endpoint directory, value store, endpoint status store and catalog search, run against both adapters | `apps/gateway/src/ports/testing/` |
 | Catalog | Each seeded endpoint yields its value from recorded responses | The real engine, the firewall and the recordings | `apps/gateway/src/catalog/`, `apps/gateway/src/entry/local-gateway.test.ts` |
 | Proof | The whole system works against live sources | The real engine, database and network | `pnpm proof:recipe`, `pnpm proof:gateway`; reports in [proofs/](proofs/README.md) |
 

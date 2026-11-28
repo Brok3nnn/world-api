@@ -62,6 +62,13 @@ terms, update the source file in `packages/db/src/seed/sources/` (its `terms` an
 - `max_age` cannot force refreshes faster than an endpoint's freshness floor.
 - Every list has a maximum page size.
 
+## Known limitations
+
+- The 250 ms expression budget is checked between evaluation steps, so one expensive built-in
+  call, such as `$pad` with a huge width, runs past it (about 2 s for 200 million characters) and
+  blocks the process meanwhile. Hand-written recipes avoid this; generated ones will need a
+  tighter guard.
+
 ## Planned
 
 These guarantees belong to the builder agent and to accounts, which are not built:
